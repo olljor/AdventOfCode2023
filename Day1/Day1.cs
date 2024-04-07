@@ -1,16 +1,13 @@
-﻿using System;
-using System.Text;
+﻿using System.Text;
 
-class CalibrationDocumnet
+class Day1
 {
     private static IEnumerable<int> ExtractDigits(IEnumerable<string> lines)
     {
         List<int> digits = new List<int>();
-
         foreach (string line in lines) 
         {
             var digit = new StringBuilder();
-            digit.Append(0);
             foreach (char c in line)
             {
                 if (Char.IsDigit(c))
@@ -40,11 +37,7 @@ class CalibrationDocumnet
     public static void Main(string[] args)
     {
         IEnumerable<string> inputs = File.ReadLines("C:\\Users\\olljo\\source\\repos\\AdventOfCode2023\\Day1\\Day1_inputs.txt");
-
         IEnumerable<int> digits = ExtractDigits(inputs);
-
-        int sum = digits.Sum();
-
-        Console.WriteLine(sum);
+        Console.WriteLine(digits.Sum());
     }
 }
