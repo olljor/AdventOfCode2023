@@ -1,9 +1,8 @@
-﻿
-using System.Text;
+﻿using System.Text;
 
 class Day2
 {
-    private static IDictionary<string, IEnumerable<string>> ValidGames(IDictionary<string, int> rules, IDictionary<string, IEnumerable<string>> games) 
+    private static IDictionary<int, IEnumerable<string>> ValidGames(IDictionary<string, int> rules, IDictionary<int, IEnumerable<string>> games) 
     {
         foreach (var game in games)
         {
@@ -61,14 +60,20 @@ class Day2
         return games;
     }
 
-    private static IDictionary<string, IEnumerable<string>> SplitGames(IEnumerable<string> inputs) 
+    private static IDictionary<int, IEnumerable<string>> SplitGames(IEnumerable<string> inputs) 
     {
-        IDictionary<string, IEnumerable<string>> games = new Dictionary<string, IEnumerable<string>>();
+        IDictionary<int, IEnumerable<string>> games = new Dictionary<int, IEnumerable<string>>();
         foreach (string input in inputs)
         {
             string[] gameSplit = input.Split(":");
+            var digit = new StringBuilder();
+            foreach (char c in gameSplit[0])
+                if (Char.IsDigit(c))
+                    digit.Append(c);
+            
+            int id = Int32.Parse(digit.ToString());
             string[] setSplit = gameSplit[1].Split(";");
-            games.Add(gameSplit[0], setSplit);
+            games.Add(id, setSplit);
         }
         return games;
     }
@@ -80,26 +85,9 @@ class Day2
         rules.Add("green", 13);
         rules.Add("blue", 14);
 
-        IDictionary<string, IEnumerable<string>> games = SplitGames(File.ReadLines("C:\\Users\\olljo\\source\\repos\\AdventOfCode2023\\Day2\\Day2_inputs.txt"));
+        IDictionary<int, IEnumerable<string>> games = SplitGames(File.ReadLines("C:\\Users\\olljo\\source\\repos\\AdventOfCode2023\\Day2\\Day2_inputs.txt"));
         games = ValidGames(rules, games);
 
-        int counter = 0;
-        foreach (var game in games)
-        {
-            var digit = new StringBuilder();
-            foreach (char c in game.Key)
-                if (Char.IsDigit(c))
-                    digit.Append(c);
-
-            int id = Int32.Parse(digit.ToString());
-            counter = counter + id;
-            Console.Write(id);
-            foreach (var set in game.Value)
-            {
-                Console.Write(": " + set);
-            }
-            Console.WriteLine();
-        }
-        Console.WriteLine(counter);
+        Console.WriteLine("Answer: " + games.Keys.Sum());
     }
 }
