@@ -8,22 +8,15 @@ class Day4Part1
     {
         foreach (var card in Day4Part2.Cards)
         {
-            foreach (var refrenceNumber in card.refrenceNumbers)            
+            foreach (var refrenceNumber in card.refrenceNumbers)
+            {
                 if (card.winningNumbers.Contains(refrenceNumber))
                 {
                     card.score = card.score * 2;
                     if (card.score == 0)
                         card.score++;
                 }
-            
-       }
-    }
-
-    private static void GenerateCopies() 
-    {
-        foreach (Card card in Day4Part2.Cards) 
-        { 
-
+            }
         }
     }
 
