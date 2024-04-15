@@ -1,44 +1,17 @@
 ﻿using System.Text;
+using Day4;
 
-class Day4
+class Day4Part1
 {
-    private static List<int> StringToListInt(string line)
-    {
-        List<int> digits = new List<int>();
-
-        bool digitFound = false;
-        var digit = new StringBuilder();
-        int counter = 0;
-        foreach (char c in line)
-        {
-            counter++;
-            if (Char.IsDigit(c))
-            {
-                digitFound = true;
-                digit.Append(c);
-            }
-
-            if ((digitFound && !Char.IsDigit(c))
-                || (digitFound && counter == line.Length))
-            {
-                digits.Add(Int32.Parse(digit.ToString()));
-                digitFound = false;
-                digit = new StringBuilder();
-            }
-        }
-
-        return digits;
-    }
-
-    private static List<int> ValidateCards(Dictionary<IEnumerable<int>, IEnumerable<int>> cards)
+    private static List<int> ValidateCards()
     {
         List<int> scores = new List<int>();
-        foreach (var card in cards)
+        foreach (var card in Day4Part2.Cards)
         {
             int score = 0;
-            foreach (var winningNumber in card.Key)
+            foreach (var winningNumber in card.refrenceNumbers)
             {
-                if (card.Value.Contains(winningNumber))
+                if (card.winningNumbers.Contains(winningNumber))
                 {
                     score = score * 2;
                     if (score == 0)
@@ -53,15 +26,10 @@ class Day4
     public static void Main(string[] args)
     {
         IEnumerable<string> input = File.ReadLines("C:\\Users\\olljo\\source\\repos\\AdventOfCode2023\\Day4\\Day4_input.txt");
-        Dictionary<IEnumerable<int>, IEnumerable<int>> cards = new Dictionary<IEnumerable<int>, IEnumerable<int>>();
+        Day4Part2.setCards(input);
 
-        foreach (var item in input)
-        {
-            string[] splits = item.Split(':');
-            string[] numbersAsString = splits[1].Split('|');
-            cards.Add(StringToListInt(numbersAsString[0]), StringToListInt(numbersAsString[1]));
-        }
-        Console.WriteLine(ValidateCards(cards).Sum());
+        Console.WriteLine(ValidateCards().Sum());
 
+        // Part 2
     }
 }
