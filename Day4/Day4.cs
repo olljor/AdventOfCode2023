@@ -1,35 +1,45 @@
-﻿using System.Text;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Text;
 using Day4;
 
 class Day4Part1
 {
-    private static List<int> ValidateCards()
+    private static void ValidateCards()
     {
-        List<int> scores = new List<int>();
         foreach (var card in Day4Part2.Cards)
         {
-            int score = 0;
-            foreach (var winningNumber in card.refrenceNumbers)
-            {
-                if (card.winningNumbers.Contains(winningNumber))
+            foreach (var refrenceNumber in card.refrenceNumbers)            
+                if (card.winningNumbers.Contains(refrenceNumber))
                 {
-                    score = score * 2;
-                    if (score == 0)
-                        score++;
+                    card.score = card.score * 2;
+                    if (card.score == 0)
+                        card.score++;
                 }
-            }
-            scores.Add(score);
+            
+       }
+    }
+
+    private static void GenerateCopies() 
+    {
+        foreach (Card card in Day4Part2.Cards) 
+        { 
+
         }
-        return scores;
     }
 
     public static void Main(string[] args)
     {
         IEnumerable<string> input = File.ReadLines("C:\\Users\\olljo\\source\\repos\\AdventOfCode2023\\Day4\\Day4_input.txt");
         Day4Part2.setCards(input);
+        ValidateCards();
 
-        Console.WriteLine(ValidateCards().Sum());
+        // Part 1
+        int sum = 0;
+        foreach (Card card in Day4Part2.Cards)
+            sum = sum + card.score;
+        Console.WriteLine(sum);
 
         // Part 2
+
     }
 }

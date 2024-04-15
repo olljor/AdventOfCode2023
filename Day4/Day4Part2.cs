@@ -8,9 +8,10 @@ namespace Day4;
 public class Card
 {
     public int id { get; set; }
-    public IEnumerable<int> refrenceNumbers { get; set; }
-    public IEnumerable<int> winningNumbers { get; set; }
+    public IEnumerable<int> refrenceNumbers { get; set; } = Enumerable.Empty<int>();
+    public IEnumerable<int> winningNumbers { get; set; } = Enumerable.Empty<int>();
     public int copies { get; set; } = 1;
+    public int score { get; set; } = 0;
 }
 
 internal class Day4Part2
@@ -55,7 +56,6 @@ internal class Day4Part2
                 digit = new StringBuilder();
             }
         }
-
         return digits;
     }
 
