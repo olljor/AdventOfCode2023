@@ -1,9 +1,7 @@
-﻿
-using System.Text;
+﻿using System.Text;
 
 class Day4
 {
-
     private static List<int> StringToListInt(string line)
     {
         List<int> digits = new List<int>();
@@ -63,8 +61,7 @@ class Day4
             string[] numbersAsString = splits[1].Split('|');
             cards.Add(StringToListInt(numbersAsString[0]), StringToListInt(numbersAsString[1]));
         }
-        
-        IEnumerable<int> scores = ValidateCards(cards);
-        Console.WriteLine(scores.Sum());
+        Console.WriteLine(ValidateCards(cards).Sum());
+
     }
 }
