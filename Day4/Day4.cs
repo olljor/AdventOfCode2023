@@ -4,21 +4,20 @@ class Day4Part1
 {
     private static void ValidateCards()
     {
-        foreach (Card card in Day4Part2.Cards)
+        foreach (Card card in CardHandler.Cards)
         {
             for (int i = 0; i < card.copies; i++)
             {
                 int wins = 0;
                 foreach (var refrenceNumber in card.refrenceNumbers)
-                {
                     if (card.winningNumbers.Contains(refrenceNumber))
                         wins++;
-                }
+                
                 if (wins > 0)
                     GenerateCopies(card, wins);
+
                 card.TotalWins += wins;
             }
-            card.TallyScores();
         }
     }
 
@@ -26,36 +25,23 @@ class Day4Part1
     {
         int indexLow = card.id;
         int indexHigh = card.id + wins - 1;
-        if (indexHigh >= Day4Part2.Cards.Count())
-            indexHigh = Day4Part2.Cards.Count() - 1;
+        if (indexHigh >= CardHandler.Cards.Count())
+            indexHigh = CardHandler.Cards.Count() - 1;
 
         for (int i = indexLow; i <= indexHigh; i++)
-        {
-            try
-            {
-                Day4Part2.Cards[i].copies++;
-            }
-            catch (Exception ex) { Console.WriteLine(ex); }
-        }
-
+            CardHandler.Cards[i].copies++;
     }
 
     public static void Main(string[] args)
     {
         IEnumerable<string> input = File.ReadLines("C:\\Users\\olljo\\source\\repos\\AdventOfCode2023\\Day4\\Day4_input.txt");
-        Day4Part2.setCards(input);
+        CardHandler.SetCards(input);
         ValidateCards();
 
         // Part 1
-        int sum = 0;
-        foreach (Card card in Day4Part2.Cards)
-            sum = sum + card.score;
-        Console.WriteLine("Part 1: " + sum);
+        Console.WriteLine("Part 1 answer: " + CardHandler.Cards.Sum(x => x.score));
 
         // Part 2
-        int sdsds = 0;
-        foreach (Card card in Day4Part2.Cards)
-            sdsds = sdsds + card.copies;
-        Console.WriteLine("Part 2: " + sdsds);
+        Console.WriteLine("Part 2 answer: " + CardHandler.Cards.Sum(x => x.copies));
     }
 }

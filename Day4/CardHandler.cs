@@ -1,30 +1,11 @@
 ﻿using System.Text;
 
 namespace Day4;
-public class Card
-{
-    public int id { get; set; }
-    public IEnumerable<int> refrenceNumbers { get; set; } = Enumerable.Empty<int>();
-    public IEnumerable<int> winningNumbers { get; set; } = Enumerable.Empty<int>();
-    public int copies { get; set; } = 1;
-    public int score { get; set; } = 0;
-    public int TotalWins { get; set; } = 0;
-    public void TallyScores() 
-    {
-        for (int i = 0; i < TotalWins / copies; i++)
-        {
-            score = score * 2;
-            if (score == 0)
-                score++;
-        }
-    }
 
-}
-
-internal class Day4Part2
+internal class CardHandler
 {
     public static List<Card> Cards = new List<Card>();
-    public static void setCards(IEnumerable<string> input)
+    public static void SetCards(IEnumerable<string> input)
     {
         foreach (var item in input)
         {
