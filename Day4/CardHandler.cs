@@ -5,7 +5,7 @@ namespace Day4;
 internal class CardHandler
 {
     public static List<Card> Cards = new List<Card>();
-    public static void SetCards(IEnumerable<string> input)
+    public CardHandler(IEnumerable<string> input)
     {
         foreach (var item in input)
         {
@@ -18,6 +18,37 @@ internal class CardHandler
             card.winningNumbers = StringToListInt(numbersAsString[1]);
             Cards.Add(card);
         }
+        ValidateCards();
+    }
+
+    private static void ValidateCards()
+    {
+        foreach (Card card in Cards)
+        {
+            for (int i = 0; i < card.copies; i++)
+            {
+                int wins = 0;
+                foreach (var refrenceNumber in card.refrenceNumbers)
+                    if (card.winningNumbers.Contains(refrenceNumber))
+                        wins++;
+
+                if (wins > 0)
+                    GenerateCopies(card, wins);
+
+                card.TotalWins += wins;
+            }
+        }
+    }
+
+    private static void GenerateCopies(Card card, int wins)
+    {
+        int indexLow = card.id;
+        int indexHigh = card.id + wins - 1;
+        if (indexHigh >= Cards.Count())
+            indexHigh = Cards.Count() - 1;
+
+        for (int i = indexLow; i <= indexHigh; i++)
+            Cards[i].copies++;
     }
 
     private static List<int> StringToListInt(string line)
