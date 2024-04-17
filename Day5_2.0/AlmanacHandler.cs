@@ -13,7 +13,7 @@ internal class AlmanacHandler
 
         string relation = string.Empty;
         int counter = 0;
-        List<AlmanacMap> items = new List<AlmanacMap>();
+        List<AlmanacMapRow> items = new List<AlmanacMapRow>();
         foreach (string input in inputs)
         {
             counter++;
@@ -26,11 +26,11 @@ internal class AlmanacHandler
                 }
 
                 relation = input;
-                items = new List<AlmanacMap>();
+                items = new List<AlmanacMapRow>();
             }
             else if (!string.IsNullOrEmpty(input) && !input.Contains("seeds"))
             {
-                AlmanacMap item = new AlmanacMap();
+                AlmanacMapRow item = new AlmanacMapRow();
                 string[] splits = input.Split(' ');
                 item.destination = long.Parse(splits[0]);
                 item.source = long.Parse(splits[1]);
@@ -45,7 +45,7 @@ internal class AlmanacHandler
 
     }
 
-    private static void SetAlmenacRelation(IEnumerable<AlmanacMap> items, string relation)
+    private static void SetAlmenacRelation(IEnumerable<AlmanacMapRow> items, string relation)
     {
         switch (relation)
         {

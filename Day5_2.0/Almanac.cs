@@ -1,6 +1,6 @@
 ﻿namespace Day5;
 
-class AlmanacMap 
+class AlmanacMapRow 
 {
     public long destination { get; set; }
     public long source { get; set; }
@@ -10,11 +10,11 @@ class AlmanacMap
 class Almanaca
 {
     public IEnumerable<long> seeds;
-    public IEnumerable<AlmanacMap> seedToSoil = new List<AlmanacMap>();
-    public IEnumerable<AlmanacMap> soilToFertilizer = new List<AlmanacMap>();
-    public IEnumerable<AlmanacMap> fertilizerToWater = new List<AlmanacMap>();
-    public IEnumerable<AlmanacMap> waterToLight = new List<AlmanacMap>();
-    public IEnumerable<AlmanacMap> lightToTemperature = new List<AlmanacMap>();
-    public IEnumerable<AlmanacMap> temperatureToHumidity = new List<AlmanacMap>();
-    public IEnumerable<AlmanacMap> humidityToLocation = new List<AlmanacMap>();
+    public IEnumerable<AlmanacMapRow> seedToSoil = new List<AlmanacMapRow>();
+    public IEnumerable<AlmanacMapRow> soilToFertilizer = new List<AlmanacMapRow>();
+    public IEnumerable<AlmanacMapRow> fertilizerToWater = new List<AlmanacMapRow>();
+    public IEnumerable<AlmanacMapRow> waterToLight = new List<AlmanacMapRow>();
+    public IEnumerable<AlmanacMapRow> lightToTemperature = new List<AlmanacMapRow>();
+    public IEnumerable<AlmanacMapRow> temperatureToHumidity = new List<AlmanacMapRow>();
+    public IEnumerable<AlmanacMapRow> humidityToLocation = new List<AlmanacMapRow>();
 }
