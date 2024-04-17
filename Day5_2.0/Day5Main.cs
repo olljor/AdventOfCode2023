@@ -6,22 +6,26 @@ class Day5Main
     private static long FindBestPath()
     {
         long lowestLocation = 99999999999;
-        foreach (var seed in AlmanacHandler.Almanaca.seeds)
+
+        foreach (var seedDict in AlmanacHandler.Almanaca.seeds)
         {
-            long nextDestination = seed;
-            Console.Write(nextDestination + ", ");
-            nextDestination = FindNextMapRow(nextDestination, AlmanacHandler.Almanaca.seedToSoil);
-            nextDestination = FindNextMapRow(nextDestination, AlmanacHandler.Almanaca.soilToFertilizer);
-            nextDestination = FindNextMapRow(nextDestination, AlmanacHandler.Almanaca.fertilizerToWater);
-            nextDestination = FindNextMapRow(nextDestination, AlmanacHandler.Almanaca.waterToLight);
-            nextDestination = FindNextMapRow(nextDestination, AlmanacHandler.Almanaca.lightToTemperature);
-            nextDestination = FindNextMapRow(nextDestination, AlmanacHandler.Almanaca.temperatureToHumidity);
-            long location = FindNextMapRow(nextDestination, AlmanacHandler.Almanaca.humidityToLocation);
-            Console.Write(location);
-            Console.WriteLine();
-            if (lowestLocation > location) 
+            long initialSeed = seedDict.Key;
+            long rangeSeed = seedDict.Value;
+            Console.WriteLine("Seed pair " + initialSeed + ", " +  rangeSeed);
+            for (long seed = initialSeed; seed < initialSeed + rangeSeed; seed++)
             {
-                lowestLocation = location;
+                long nextDestination = seed;
+                nextDestination = FindNextMapRow(nextDestination, AlmanacHandler.Almanaca.seedToSoil);
+                nextDestination = FindNextMapRow(nextDestination, AlmanacHandler.Almanaca.soilToFertilizer);
+                nextDestination = FindNextMapRow(nextDestination, AlmanacHandler.Almanaca.fertilizerToWater);
+                nextDestination = FindNextMapRow(nextDestination, AlmanacHandler.Almanaca.waterToLight);
+                nextDestination = FindNextMapRow(nextDestination, AlmanacHandler.Almanaca.lightToTemperature);
+                nextDestination = FindNextMapRow(nextDestination, AlmanacHandler.Almanaca.temperatureToHumidity);
+                long location = FindNextMapRow(nextDestination, AlmanacHandler.Almanaca.humidityToLocation);
+                if (lowestLocation > location)
+                {
+                    lowestLocation = location;
+                }
             }
         }
         return lowestLocation;
@@ -34,12 +38,9 @@ class Day5Main
             if (destination >= row.source &&
                 destination < row.source + row.range)
             {
-                long nextDestination = row.destination + destination - row.source;
-                Console.Write(nextDestination + ", ");
-                return nextDestination;
+                return row.destination + destination - row.source;
             }
         }
-        Console.Write(destination + ", ");
         return destination;
     }
 

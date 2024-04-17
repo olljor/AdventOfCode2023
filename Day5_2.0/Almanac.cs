@@ -9,7 +9,7 @@ class AlmanacMapRow
 
 class Almanaca
 {
-    public IEnumerable<long> seeds;
+    public IDictionary<long, long> seeds = new Dictionary<long, long>();
     public IEnumerable<AlmanacMapRow> seedToSoil = new List<AlmanacMapRow>();
     public IEnumerable<AlmanacMapRow> soilToFertilizer = new List<AlmanacMapRow>();
     public IEnumerable<AlmanacMapRow> fertilizerToWater = new List<AlmanacMapRow>();

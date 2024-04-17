@@ -9,7 +9,7 @@ internal class AlmanacHandler
     public AlmanacHandler(IEnumerable<string> inputs)
     {
         string[] seedSplits = inputs.First().Split(':');
-        Almanaca.seeds = StringToListInt(seedSplits[1]);
+        Almanaca.seeds = StringToDict(seedSplits[1]);
 
         string relation = string.Empty;
         int counter = 0;
@@ -79,13 +79,15 @@ internal class AlmanacHandler
         }
     }
 
-    private static List<long> StringToListInt(string line)
+    private static IDictionary<long, long> StringToDict(string line)
     {
-        List<long> digits = new List<long>();
+        Dictionary<long, long> digits = new Dictionary<long, long>();
 
         bool digitFound = false;
         var digit = new StringBuilder();
         int counter = 0;
+        long key = 0;
+
         foreach (char c in line)
         {
             counter++;
@@ -98,7 +100,15 @@ internal class AlmanacHandler
             if ((digitFound && !char.IsDigit(c))
                 || (digitFound && counter == line.Length))
             {
-                digits.Add(long.Parse(digit.ToString()));
+                if (key == 0)
+                {
+                    key = long.Parse(digit.ToString());
+                }
+                else
+                {
+                    digits.Add(key, long.Parse(digit.ToString()));
+                    key = 0;
+                }
                 digitFound = false;
                 digit = new StringBuilder();
             }
