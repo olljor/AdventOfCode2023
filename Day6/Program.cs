@@ -1,10 +1,10 @@
 ﻿
 class Day6
 {
-    private static int FindNrOfTimes(int bestDistance, int time) 
+    private static long FindNrOfTimes(long bestDistance, long time) 
     {
-        int modifier = 0;
-        for (int t = time; t >= 0; t--)
+        long modifier = 0;
+        for (long t = time; t >= 0; t--)
         {
             if (bestDistance < t * modifier)
             {
@@ -15,23 +15,8 @@ class Day6
         return 0;
     }
 
-
     public static void Main() 
     {
-        IDictionary<int, int> races = new Dictionary<int, int>() 
-        {
-            {543, 59},
-            {1020, 68},
-            {1664, 82},
-            {1022, 74},
-        };
-
-        List<int> times = new List<int>();
-        foreach (var race in races) 
-        {
-            times.Add(FindNrOfTimes(race.Key, race.Value));
-        }
-        int multi = times.Aggregate((a, x) => a * x);
-        Console.WriteLine(multi);
+        Console.WriteLine(FindNrOfTimes(543102016641022, 59688274));     
     }
 }
