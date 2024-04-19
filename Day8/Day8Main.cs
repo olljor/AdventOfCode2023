@@ -18,7 +18,7 @@ class Day8Main
         Console.WriteLine(temp.First().Value[0]);
     }
 
-    private static int TraverseMaps(string currentNode, string endNode, int steps)
+    private static int TraverseMaps(List<string> currentNode, string endNode, int steps)
     {
         while (true)
         {
