@@ -10,37 +10,60 @@ class Day8Main
         IEnumerable<string> inputs = File.ReadLines("C:\\Users\\olljo\\source\\repos\\AdventOfCode2023\\Day8\\Day8_input.txt");
         directions = inputs.First();
         setMaps(inputs);
-
-        Console.WriteLine(TraverseMaps("AAA", "ZZZ", 0));
-        var temp = from map in maps
-                   where map.Key == "HJD"
-                   select map;
-        Console.WriteLine(temp.First().Value[0]);
+        string[] startNodes = GetStartNodes('A');
+        foreach (string node in startNodes)
+        {
+            Console.WriteLine(node);
+        }
+        Console.WriteLine(TraverseMaps(startNodes, 'Z', 0));
     }
 
-    private static int TraverseMaps(List<string> currentNode, string endNode, int steps)
+    private static string[] GetStartNodes(char startNodeChar)
+    {
+        List<string> nodes = new List<string>();
+        foreach (var item in maps)
+        {
+            if (item.Key.Last() == startNodeChar)
+            {
+                nodes.Add(item.Key);
+            }
+        }
+        return nodes.ToArray();
+    }
+
+    private static long TraverseMaps(string[] currentNode, char end, long steps)
     {
         while (true)
         {
-            foreach (char c in directions)
+            for (int i = 0; i < currentNode.Length; i++)
             {
-                if (currentNode == endNode)
+                foreach (char c in directions)
                 {
-                    return steps;
+                    bool allEnd = true;
+                    foreach (string node in currentNode)
+                    {
+                        if (node.Last() != end)
+                        {
+                            allEnd = false;
+                            break;
+                        }
+                    }
+                    if (allEnd)
+                        return steps;
+
+                    int direction = 0;
+                    if (c == 'L')
+                        direction = 0;
+                    else if (c == 'R')
+                        direction = 1;
+
+                    var temp = from map in maps
+                               where map.Key == currentNode[i]
+                               select map.Value[direction];
+
+                    currentNode[i] = temp.First();
+                    steps++;
                 }
-
-                steps++;
-                int direction = 0;
-                if (c == 'L')
-                    direction = 0;
-                else if (c == 'R')
-                    direction = 1;
-
-                var temp = from map in maps
-                           where map.Key == currentNode
-                           select map.Value[direction];
-
-                currentNode = temp.First();
             }
         }
     }
@@ -65,7 +88,7 @@ class Day8Main
 
         foreach (char c in node)
         {
-            if (char.IsLetter(c))
+            if (char.IsLetter(c) || char.IsDigit(c))
             {
                 cleanNode.Append(c);
             }
