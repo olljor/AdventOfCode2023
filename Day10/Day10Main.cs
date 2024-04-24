@@ -1,125 +1,105 @@
-﻿
-
-using Day10;
-
-class PipeCordinate
-{
-    public int row { get; set; }
-    public int col { get; set; }
-}
+﻿using Day10;
 class Day10Main
 {
-    private static int TraversePipeSystem()
-    {
-        Pipe previousPipe = new Pipe();
-        PipeCordinate currentPipeCordinate = new PipeCordinate
-        {
-            row = PipeSystem.pipeStartIndex[0],
-            col = PipeSystem.pipeStartIndex[1]
-        };
-        Tuple<PipeCordinate, Pipe> info = new Tuple<PipeCordinate, Pipe>(currentPipeCordinate, previousPipe);
-
-        int counter = 0;
-        while (true)
-        {
-            counter++;
-            //Console.WriteLine(info.Item1.row + ", " + info.Item1.col);
-            info = GetNextPipe(info.Item1, info.Item2);
-
-            if (PipeSystem.pipeStartIndex[0] == info.Item1.row
-            && PipeSystem.pipeStartIndex[1] == info.Item1.col)
-            {
-                return counter;
-            }
-        }
-    }
-
-    private static Tuple<PipeCordinate, Pipe> GetNextPipe(PipeCordinate currentPipeCordinate, Pipe previousPipeDirection)
-    {
-        Pipe currentPipe = PipeSystem.pipeSystem[currentPipeCordinate.row][currentPipeCordinate.col];
-        try
-        {
-            if (currentPipe.connectionSouth
-                && !previousPipeDirection.connectionNorth
-                && PipeSystem.pipeSystem[currentPipeCordinate.row + 1][currentPipeCordinate.col].connectionNorth)
-            {
-                return new Tuple<PipeCordinate, Pipe>(
-                    new PipeCordinate
-                    {
-                        row = currentPipeCordinate.row + 1,
-                        col = currentPipeCordinate.col
-                    },
-                    new Pipe { connectionSouth = true }
-                    );
-            }
-
-        }
-        catch (Exception) { }
-
-        try
-        {
-            if (currentPipe.connectionNorth
-                && !previousPipeDirection.connectionSouth
-                && PipeSystem.pipeSystem[currentPipeCordinate.row - 1][currentPipeCordinate.col].connectionSouth)
-            {
-                return new Tuple<PipeCordinate, Pipe>(
-                    new PipeCordinate
-                    {
-                        row = currentPipeCordinate.row - 1,
-                        col = currentPipeCordinate.col
-                    },
-                    new Pipe { connectionNorth = true }
-                    );
-            }
-        }
-        catch (Exception) { }
-
-        try
-        {
-            if (currentPipe.connectionEast
-                && !previousPipeDirection.connectionWest
-                && PipeSystem.pipeSystem[currentPipeCordinate.row][currentPipeCordinate.col + 1].connectionWest)
-            {
-                return new Tuple<PipeCordinate, Pipe>(
-                    new PipeCordinate
-                    {
-                        row = currentPipeCordinate.row,
-                        col = currentPipeCordinate.col + 1
-                    },
-                    new Pipe { connectionEast = true }
-                    );
-            }
-        }
-        catch (Exception) { }
-
-        try
-        {
-            if (currentPipe.connectionWest
-                && !previousPipeDirection.connectionEast
-                && PipeSystem.pipeSystem[currentPipeCordinate.row][currentPipeCordinate.col - 1].connectionEast)
-            {
-                return new Tuple<PipeCordinate, Pipe>(
-                    new PipeCordinate
-                    {
-                        row = currentPipeCordinate.row,
-                        col = currentPipeCordinate.col - 1
-                    },
-                    new Pipe { connectionWest = true }
-                    );
-            }
-        }
-        catch (Exception) { }
-
-        Console.WriteLine("Something went wrong");
-        return new Tuple<PipeCordinate, Pipe>(new PipeCordinate(), currentPipe);
-    }
+    public static char[,] traversedMap = new char[0, 0];
 
     public static void Main()
     {
         IEnumerable<string> inputs = File.ReadLines("C:\\Users\\olljo\\source\\repos\\AdventOfCode2023\\Day10\\Day10_input.txt");
         new PipeSystem(inputs);
 
-        int steps = TraversePipeSystem();
-        Console.WriteLine(steps/2);
+        traversedMap = new char[PipeSystem.pipeSystem.Count, PipeSystem.pipeSystem.First().Count];
+        int steps = Traverse.TraversePipeSystem();
+        Console.WriteLine(steps / 2);
+
+
+        Console.WriteLine(PipeSystem.pipeSystem.Count + " "+ PipeSystem.pipeSystem.First().Count);
+
+        int nrNests = GetNests();
+    }
+
+    private static int GetNests()
+    {
+        int counter = 0;
+        for (int i = 0; i < PipeSystem.pipeSystem.Count; i++)
+        {
+            for (int j = 0; j < PipeSystem.pipeSystem.First().Count; j++)
+            {
+                if (traversedMap[i, j] == '\0')
+                {
+                    try
+                    {
+                        if (GetEscape(i, j))
+                        {
+                            traversedMap[i, j] = '.';
+                            counter++;
+                        }
+                    }
+                    catch (Exception) { }
+                }
+
+                if (traversedMap[i, j] != '\0')
+                {
+                    Console.Write(traversedMap[i, j]);
+                }
+                else
+                {
+                    Console.Write(" ");
+                }
+
+            }
+            Console.WriteLine();
+        }
+        return counter;
+    }
+
+    private static bool GetEscape(int index, int jndex)
+    {
+        bool valid = false;
+
+        for (int i = index; i < PipeSystem.pipeSystem.Count; i++)
+        {
+            if (traversedMap[i, jndex] != '\0')
+            {
+                valid = true;
+                break;
+            }
+        }
+        if (!valid) return false;
+
+        valid = false;
+        for (int i = index; i != 0; i--)
+        {
+            if (traversedMap[i, jndex] != '\0')
+            {
+                valid = true;
+                break;
+            }
+        }
+        if (!valid) return false;
+
+        valid = false;
+        for (int j = jndex; j < PipeSystem.pipeSystem.Count; j++)
+        {
+            if (traversedMap[index, j] != '\0')
+            {
+                valid = true;
+                break;
+            }
+        }
+        if (!valid) return false;
+
+        valid = false;
+        for (int j = jndex; j != 0; j--)
+        {
+            if (traversedMap[index, j] != '\0')
+            {
+                valid = true;
+                break;
+            }
+        }
+        if (!valid) return false;
+        
+        return true;
     }
 }
