@@ -76,7 +76,6 @@ internal class PipeSystem
                     break;
 
                 case 'S':
-                    Console.WriteLine("start");
                     pipeStartIndex[0] = pipeSystem.Count;
                     pipeStartIndex[1] = pipes.Count;
                     pipes.Add(new Pipe

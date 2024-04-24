@@ -120,6 +120,6 @@ class Day10Main
         new PipeSystem(inputs);
 
         int steps = TraversePipeSystem();
-        Console.WriteLine(steps);
+        Console.WriteLine(steps/2);
     }
 }
