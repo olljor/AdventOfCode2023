@@ -7,20 +7,15 @@ class Day10Main
     {
         IEnumerable<string> inputs = File.ReadLines("C:\\Users\\olljo\\source\\repos\\AdventOfCode2023\\Day10\\Day10_input.txt");
         new PipeSystem(inputs);
-
         traversedMap = new char[PipeSystem.pipeSystem.Count, PipeSystem.pipeSystem.First().Count];
-        int steps = Traverse.TraversePipeSystem();
-        Console.WriteLine(steps / 2);
 
-
-        Console.WriteLine(PipeSystem.pipeSystem.Count + " "+ PipeSystem.pipeSystem.First().Count);
-
-        int nrNests = GetNests();
-        Console.WriteLine(nrNests);
+        Console.WriteLine(Traverse.TraversePipeSystem() / 2);
+        Console.WriteLine(GetNests());
     }
 
     private static int GetNests()
     {
+        DfsEscape de = new DfsEscape();
         int counter = 0;
         for (int i = 0; i < PipeSystem.pipeSystem.Count; i++)
         {
@@ -28,13 +23,11 @@ class Day10Main
             {
                 if (traversedMap[i, j] == '\0')
                 {
-                    DfsEscape de = new DfsEscape();
-
-                        if (de.TryToEscape(i, j))
-                        {
-                            traversedMap[i, j] = '.';
-                            counter++;
-                        }
+                    if (de.TryToEscape(i, j))
+                    {
+                        traversedMap[i, j] = '.';
+                        counter++;
+                    }
                 }
 
                 if (traversedMap[i, j] != '\0')
