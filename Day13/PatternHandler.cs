@@ -1,4 +1,6 @@
-﻿namespace Day13;
+﻿using System.Linq;
+
+namespace Day13;
 
 class Pattern
 {
@@ -8,9 +10,9 @@ class Pattern
 
 internal class PatternHandler
 {
-    public static List<Pattern> patterns = new List<Pattern>();
-    public PatternHandler(IEnumerable<string> inputs)
+    public List<Pattern> SetPatterns(IEnumerable<string> inputs)
     {
+        List<Pattern> patterns = new List<Pattern>();
         List<string> tempPattern = new List<string>();
         foreach (var input in inputs)
         {
@@ -25,6 +27,7 @@ internal class PatternHandler
             }
         }
         patterns.Add(SetRealPattern(tempPattern));
+        return patterns;
     }
 
     private Pattern SetRealPattern(List<string> tempPattern)
@@ -35,7 +38,6 @@ internal class PatternHandler
         for (int i = 0; i < tempPattern.Count; i++)
         {
             localHori.Add(tempPattern[i]);
-
         }
 
         for (int j = 0; j < tempPattern.First().Length; j++)
@@ -53,5 +55,58 @@ internal class PatternHandler
             horizontal = localHori,
             vertical = localVert
         };
+    }
+
+    public async Task<int> FindPatternsAsync(List<Pattern> patterns)
+    {
+        List<Task<int>> tasks = new List<Task<int>>();
+        foreach (var pattern in patterns)
+        {
+            tasks.Add(Task.Run(() => CheckForSimilar(pattern)));
+        }
+        await Task.WhenAll(tasks);
+
+        int total = 0;
+        tasks.ForEach(task => total += task.Result);
+        return total;
+    }
+
+    private int CheckForSimilar(Pattern pattern)
+    {
+        for (int i = 1; i < pattern.vertical.Count; i++)
+        {
+            if (pattern.vertical[i - 1] == pattern.vertical[i])
+            {
+                if (VerifyPattern(i, pattern.vertical))
+                {
+                    return i;
+                }
+            }
+        }
+        for (int i = 1; i < pattern.horizontal.Count; i++)
+        {
+            if (pattern.horizontal[i - 1] == pattern.horizontal[i])
+            {
+                if (VerifyPattern(i, pattern.horizontal))
+                {
+                    return i * 100;
+                }
+            }
+        }
+        return 0;
+    }
+
+    private bool VerifyPattern(int index, List<string> pattern)
+    {
+        int modifier = 1;
+        while (index - modifier - 1 >= 0 && index + modifier < pattern.Count)
+        {
+            if (pattern[index - modifier - 1] != pattern[index + modifier])
+            {
+                return false;
+            }
+            modifier++;
+        }
+        return true;
     }
 }
