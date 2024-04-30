@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Text;
 
 namespace Day14;
 class PlatformHandler
 {
-    private List<string> FlipPattern(List<string> platform)
+    internal List<string> FlipPattern(List<string> platform)
     {
         List<string> verticalPatterns = new List<string>();
         for (int i = 0; i < platform.First().Length; i++)
@@ -81,37 +77,18 @@ class PlatformHandler
     private string RollBouldersNorthWest(string pattern)
     {
         char[] chars = pattern.ToCharArray();
-        bool boulderMoved = false;
-        while (!boulderMoved)
+        int freeSpot = 0;
+        for (int i = 0; i < chars.Length; i++)
         {
-            bool boulderFound = false;
-            boulderMoved = true;
-            for (int i = chars.Length - 1; i >= 0; i--)
+            if (chars[i] == '#')
             {
-                if ((chars[i] == '#' || chars[i] == 'O')
-                    && boulderFound)
-                {
-                    chars[i + 1] = 'O';
-                    boulderFound = false;
-                }
-
-                if (chars[i] == 'O' && !boulderFound)
-                {
-                    boulderFound = true;
-                    chars[i] = '.';
-                }
-                else
-                {
-                    if (boulderFound)
-                    {
-                        boulderMoved = false;
-                    }
-                    chars[i] = chars[i];
-                }
+                freeSpot = i + 1;
             }
-            if (boulderFound)
+            if (chars[i] == 'O')
             {
-                chars[0] = 'O';
+                chars[i] = '.';
+                chars[freeSpot] = 'O';
+                freeSpot++;
             }
         }
         return new string(chars);
@@ -119,37 +96,18 @@ class PlatformHandler
     private string RollBouldersSouthEst(string pattern)
     {
         char[] chars = pattern.ToCharArray();
-        bool boulderMoved = false;
-        while (!boulderMoved)
+        int freeSpot = chars.Length - 1;
+        for (int i = chars.Length - 1; i >= 0; i--)
         {
-            bool boulderFound = false;
-            boulderMoved = true;
-            for (int i = 0; i < chars.Length; i++)
+            if (chars[i] == '#')
             {
-                if ((chars[i] == '#' || chars[i] == 'O')
-                    && boulderFound)
-                {
-                    chars[i - 1] = 'O';
-                    boulderFound = false;
-                }
-
-                if (chars[i] == 'O' && !boulderFound)
-                {
-                    boulderFound = true;
-                    chars[i] = '.';
-                }
-                else
-                {
-                    if (boulderFound)
-                    {
-                        boulderMoved = false;
-                    }
-                    chars[i] = chars[i];
-                }
+                freeSpot = i - 1;
             }
-            if (boulderFound)
+            if (chars[i] == 'O')
             {
-                chars[chars.Length - 1] = 'O';
+                chars[i] = '.';
+                chars[freeSpot] = 'O';
+                freeSpot--;
             }
         }
         return new string(chars);
