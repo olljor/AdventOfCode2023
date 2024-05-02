@@ -1,7 +1,4 @@
-﻿
-
-
-namespace Day15;
+﻿namespace Day15;
 
 internal class SequenceHandler
 {
@@ -34,7 +31,7 @@ internal class SequenceHandler
         int value = 0;
         foreach (char ch in task)
         {
-            value += (int)ch;
+            value += ch;
             value = value * 17;
             value = value % 256;
         }
