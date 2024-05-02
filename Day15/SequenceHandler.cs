@@ -1,40 +1,58 @@
-﻿namespace Day15;
+﻿using System.Text;
+namespace Day15;
 
 internal class SequenceHandler
 {
-    internal List<string> SetUpSequence(IEnumerable<string> inputs)
+    internal async Task<List<Tuple<string, string>>> SetUpSequence(IEnumerable<string> inputs)
     {
         List<string> sequence = new List<string>();
         foreach (var input in inputs)
         {
             sequence.AddRange(input.Split(','));
         }
-        return sequence;
-    }
 
-    internal async Task<List<int>> HashSequence(List<string> sequence)
-    {
-        List<Task<int>> tasks = new List<Task<int>>();
-        foreach (var task in sequence)
+        List<Task<Tuple<string, string>>> tasks = new List<Task<Tuple<string, string>>>();
+        foreach (var seq in sequence)
         {
-            tasks.Add(Task.Run(() => GetHashForString(task)));
+            tasks.Add(Task.Run(() => new Tuple<string, string>(GetLabel(seq), GetInstruction(seq))));
         }
         await Task.WhenAll(tasks);
-        List<int> result = new List<int>();
+
+        List<Tuple<string, string>> result = new List<Tuple<string, string>>();
         tasks.ForEach(task => result.Add(task.Result));
 
         return result;
     }
-
-    private int GetHashForString(string task)
+    private string GetLabel(string seq)
     {
-        int value = 0;
-        foreach (char ch in task)
+        StringBuilder sb = new StringBuilder();
+        foreach (char ch in seq)
         {
-            value += ch;
-            value = value * 17;
-            value = value % 256;
+            if (char.IsLetter(ch))
+            {
+                sb.Append(ch);
+            }
+            else
+            {
+                return sb.ToString();
+            }
         }
-        return value;
+        return string.Empty;
+    }
+    private string GetInstruction(string seq)
+    {
+        StringBuilder sb = new StringBuilder();
+        foreach (char ch in seq)
+        {
+            if (char.IsLetter(ch))
+            {
+                continue;
+            }
+            else
+            {
+                sb.Append(ch);
+            }
+        }
+        return sb.ToString();
     }
 }
