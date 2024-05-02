@@ -23,10 +23,10 @@ class BoxHandler
         Lens newLens = new Lens
         {
             label = tuple.Item1,
-            focal = Convert.ToInt32(new string(tuple.Item2.Last(), 1))
+            focal = int.Parse(new string(tuple.Item2.Last(), 1))
         };
 
-        int boxIndex = GetHashForLabel(tuple.Item1);
+        int boxIndex = GetHashForLabel(newLens.label);
         if (Boxes[boxIndex] == null)
         {
             Boxes[boxIndex] = [newLens];
